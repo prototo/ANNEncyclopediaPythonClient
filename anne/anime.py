@@ -1,5 +1,5 @@
-from urllib.request import urlopen
 import xml.etree.ElementTree as etree
+from anne.request import get 
 
 
 class Anime:
@@ -11,7 +11,7 @@ class Anime:
 
     def __get_data(self):
         url = self.base_url.format(self.anne_id)
-        self.response = urlopen(url).read()
+        self.response = get(url)
 
     def __parse_info(self):
         root = etree.fromstring(self.response).find('anime')
