@@ -1,5 +1,5 @@
 import xml.etree.ElementTree as etree
-
+from difflib import get_close_matches
 from anne.anime import Anime
 from anne.request import get
 
@@ -20,5 +20,11 @@ class Report:
     def get_all_anime(self):
         root = self.get_report_as_et()
         items = root.findall('item')
-        return [Anime(item.find('id').text, item.find('name').text) for item in items]
+        anime = [Anime(item.find('id').text, item.find('name').text) for item in items]
+        return { a.name: a for a in anime }
+
+    def search(self, term):
+        anime = self.get_all_anime()
+        titles = get_close_matches(term, list(anime.keys()), 5)
+        return [anime[title] for title in titles]
 
